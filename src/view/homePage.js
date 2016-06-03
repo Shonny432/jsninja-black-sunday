@@ -1,6 +1,6 @@
 import { View } from 'backbone';
 import homePageTemplate from './homePage.html'
-import popUpManager from '../helpers/popupManager'
+import { openRegistrationPopUp, openSuccessPopUp } from '../helpers/popupManager'
 
 const homePageView = View.extend({
   initialize: function() {
@@ -15,9 +15,16 @@ const homePageView = View.extend({
     "click #login":'openLogPopUp'
   },
   openRegPopUp: function(){
-    popUpManager('body');
-
-  },
+    openRegistrationPopUp()
+        .then((popupReg)=>{
+          console.log(this);
+          popupReg.remove();
+        })
+        .then(()=>{
+          openSuccessPopUp()
+          });
+        //.catch(function(){alert(123)});
+  }
   });
 
 export default homePageView;
