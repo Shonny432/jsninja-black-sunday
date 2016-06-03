@@ -37,7 +37,7 @@ var RegistrationView = View.extend({
                         headers: {'Content-Type': 'application/json'}
                     })
                         .then(()=>{
-                            this.resolve();
+                            this.resolve(this);
                         })
                 } else {
                     this.showErrorFromServer(responseJson.errors); 
@@ -78,8 +78,9 @@ var RegistrationView = View.extend({
     },
 
     closePopUp: function () {
-        this.resolve(this);
-        this.remove();
+        this.$el.find('#regform')
+            .modal('hide');
+        //this.remove();
     },
     handleEvent: function (event) {
         const flagError = checkValidation(event.target.name, event.target.value);

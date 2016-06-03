@@ -17,8 +17,7 @@ const homePageView = View.extend({
   openRegPopUp: function(){
     openRegistrationPopUp()
         .then((popupReg)=>{
-          console.log(this);
-          popupReg.remove();
+          popupReg.closePopUp();
         })
         .then(()=>{
           openSuccessPopUp()
