@@ -1,6 +1,6 @@
 import { View } from 'backbone';
 import homePageTemplate from './homePage.html'
-import { openRegistrationPopUp, openSuccessPopUp } from '../helpers/popupManager'
+import { openRegistrationPopUp, openSuccessPopUp, openLoginPopUp } from '../helpers/popupManager'
 
 const homePageView = View.extend({
   initialize: function() {
@@ -23,6 +23,9 @@ const homePageView = View.extend({
           openSuccessPopUp()
           });
         //.catch(function(){alert(123)});
+  },
+  openLogPopUp: function () {
+    openLoginPopUp();
   }
   });
 

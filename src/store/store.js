@@ -1,7 +1,13 @@
+export default class Store {
+    constructor (token){
+        this.token = token;
+    }
+    get token() {
+        return this._token;
+    }
 
-
-export const store = {
-    user:{
-        registrationStatus: false
+    set token(value) {
+        this._token = value;
     }
 };
+

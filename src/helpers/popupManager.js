@@ -1,6 +1,6 @@
 import RegistrationView from '../view/registration';
 import SuccessView from '../view/successPopup';
-import LoginView from '../view/successPopup';
+import LoginView from '../view/login';
 
 
 export function openRegistrationPopUp(container = 'body'){
@@ -19,9 +19,16 @@ export function openSuccessPopUp(container = 'body'){
 
 export function openLoginPopUp(container = 'body'){
     const loginPopUp = new LoginView();
-    $(container).append(successPopUp.$el);
-    successPopUp.render();
-    return successPopUp.promise;
+    $(container).append(loginPopUp.$el);
+    loginPopUp.render();
+    return loginPopUp.promise;
+}
+
+export function openLoginPopUp(container = 'body'){
+    const loginPopUp = new LoginView();
+    $(container).append(loginPopUp.$el);
+    loginPopUp.render();
+    return loginPopUp.promise;
 }
 
 
