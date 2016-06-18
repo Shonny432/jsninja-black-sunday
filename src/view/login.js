@@ -1,43 +1,44 @@
-import { View } from 'backbone';
+import PopupView from './popupView';
 import loginTemplate from './login.html';
-import store from '../index'
+import store from '../index';
+import api from '../api';
 
 
-var LoginView = View.extend({
-  initialize: function() {},
-  events: {
-    "submit form": "checkLoginData",
-  },
+var LoginView = PopupView.extend({
+    events: {
+        "submit form": "getUserData",
+    },
+    template: loginTemplate,
+    rememberMe: function (input, user){
+        sessionStorage.setItem('user', JSON.stringify(user));
+        if(input.is(':checked')){
+            localStorage.setItem('user', JSON.stringify(user));
+        }
+    },
     navigateRoute: function (response) {
-        if(response.user.isAdmin){
+        if (response.user.isAdmin) {
             window.app.navigate("admin", {trigger: true});
         } else {
             window.app.navigate("user", {trigger: true});
         }
     },
-    checkLoginData: function (event) {
+    getUserData: function (event) {
         event.preventDefault();
         const email = this.$el.find("#email").val();
         const pass = this.$el.find('#password').val();
-        fetch('http://tasks.smartjs.academy/login', {
-            method: 'post',
-            body: JSON.stringify({email: email, password: pass}),
-            headers: {'Content-Type': 'application/json'}
-        })
+        const checkbox = this.$el.find("input[type=checkbox]");
+        console.log(api.login);
+        api.login(email, pass)
             .then(response => {
-                return response.json()})
+                return response.json()
+            })
             .then((responseJson)=> {
-                store.token = responseJson.token;
+                console.log();
+                api.token = responseJson.token;
+                this.rememberMe(checkbox, responseJson);
                 this.navigateRoute(responseJson);
             });
-    },
-    render: function() {
-      this.$el.html(loginTemplate);
-      this.$el.find('#loginform')
-        .modal('show')
-        .on('hide.bs.modal', () => this.remove())
-      ;
-   },
-  });
+    }
+});
 
 export default LoginView;

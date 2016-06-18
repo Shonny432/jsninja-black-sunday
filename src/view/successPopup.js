@@ -1,14 +1,9 @@
-import {View} from 'backbone';
+import PopupView from './popupView';
 import successTemplate from './successPopup.html';
 
 
-var SuccessView = View.extend({
-    render: function () {
-        this.$el.html(successTemplate);
-        this.$el.find('#succes')
-            .modal('show')
-            .on('hide.bs.modal', () => this.remove())
-    }
+var SuccessView = PopupView.extend({
+    template: successTemplate,
 });
 
 export default SuccessView;

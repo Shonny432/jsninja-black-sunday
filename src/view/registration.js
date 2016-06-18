@@ -1,41 +1,25 @@
-import {View} from 'backbone';
+import PopupView from './popupView';
 import registrationTemplate from './registration.html';
 import {checkValidation, errorMessages} from '../helpers/handleErrors'
-import store from '../store/store'
+import api from '../api';
 
-var RegistrationView = View.extend({
-    initialize: function () {
-        this.promise = new Promise((resolve, reject) => {
-            this.resolve = resolve;
-            this.reject = reject;
-            
-        });
-    },
-
+var RegistrationView = PopupView.extend({
     events: {
         "submit form": "validateFormValues",
         "blur input": "handleEvent",
 
     },
-
+    template: registrationTemplate,
     validateFormValues: function (event) {
         event.preventDefault();
         const email = this.$el.find("#email").val();
         const pass = this.$el.find('#password').val();
-        fetch('http://tasks.smartjs.academy/validate/email', {
-            method: 'post',
-            body: JSON.stringify({email: email}),
-            headers: {'Content-Type': 'application/json'}
-        })
+        api.validateEmail(email)
             .then(response => {
                 return response.json()})
             .then((responseJson)=> {
                 if (responseJson.success) {
-                    fetch('http://tasks.smartjs.academy/users', {
-                        method: 'post',
-                        body: JSON.stringify({email: email, password: pass}),
-                        headers: {'Content-Type': 'application/json'}
-                    })
+                    api.registrationUser(email, pass)
                         .then(()=>{
                             this.resolve(this);
                         })
@@ -76,12 +60,6 @@ var RegistrationView = View.extend({
         // }
 
     },
-
-    closePopUp: function () {
-        this.$el.find('#regform')
-            .modal('hide');
-        //this.remove();
-    },
     handleEvent: function (event) {
         const flagError = checkValidation(event.target.name, event.target.value);
         if (!flagError) {
@@ -102,15 +80,7 @@ var RegistrationView = View.extend({
     },
     hideError: function (name) {
         this.$el.find('span[data-' + name + ']').html('').fadeOut();
-    },
-    render: function () {
-        this.$el.html(registrationTemplate);
-        this.$el.find('#regform')
-            .modal('show')
-            .on('hide.bs.modal', () => this.remove())
-        ;
     }
-
 });
 
 export default RegistrationView;

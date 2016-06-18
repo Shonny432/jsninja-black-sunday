@@ -1,10 +1,19 @@
 import { View } from 'backbone';
 import homePageTemplate from './homePage.html'
-import { openRegistrationPopUp, openSuccessPopUp, openLoginPopUp } from '../helpers/popupManager'
+import { openRegistrationPopUp, openSuccessPopUp, openLoginPopUp } from '../helpers/popupManager';
+import getUser from '../helpers/getUser';
 
 const homePageView = View.extend({
   initialize: function() {
-    // this.render();
+    const user = getUser();
+    if(!user){
+      return;
+    }
+    if (user.user.isAdmin) {
+      window.app.navigate("admin", {trigger: true});
+    } else {
+      window.app.navigate("user", {trigger: true});
+    }
   },
   render: function() {
     this.$el.html(homePageTemplate);
@@ -16,9 +25,6 @@ const homePageView = View.extend({
   },
   openRegPopUp: function(){
     openRegistrationPopUp()
-        .then((popupReg)=>{
-          popupReg.closePopUp();
-        })
         .then(()=>{
           openSuccessPopUp()
           });
